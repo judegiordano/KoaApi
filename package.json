@@ -1,0 +1,48 @@
+{
+   "name": "tsorm",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "devDependencies": {
+      "@types/bcrypt": "^3.0.0",
+      "@types/body-parser": "^1.19.0",
+      "@types/express": "^4.17.9",
+      "@types/koa": "^2.11.6",
+      "@types/koa-bodyparser": "^4.3.0",
+      "@types/koa-cors": "0.0.0",
+      "@types/koa-helmet": "^6.0.1",
+      "@types/koa-json": "^2.0.18",
+      "@types/koa-logger": "^3.1.1",
+      "@types/koa-ratelimit": "^4.2.2",
+      "@types/koa-router": "^7.4.1",
+      "@types/node": "^8.0.29",
+      "@typescript-eslint/parser": "^4.10.0",
+      "eslint": "^7.16.0",
+      "ts-node": "3.3.0",
+      "typescript": "3.3.3333"
+   },
+   "dependencies": {
+      "bcrypt": "^5.0.0",
+      "body-parser": "^1.18.1",
+      "dotenv": "^8.2.0",
+      "express": "^4.15.4",
+      "koa": "^2.13.0",
+      "koa-bodyparser": "^4.3.0",
+      "koa-cors": "0.0.16",
+      "koa-helmet": "^6.0.0",
+      "koa-json": "^2.0.2",
+      "koa-logger": "^3.2.1",
+      "koa-ratelimit": "^5.0.0",
+      "koa-router": "^10.0.0",
+      "mssql": "^6.3.0",
+      "reflect-metadata": "^0.1.10",
+      "typeorm": "0.2.29",
+      "winston": "^3.3.3"
+   },
+   "scripts": {
+      "prebuild": "eslint --fix --ext .ts,.tsx .",
+      "start": "ts-node src/index.ts",
+      "build": "tsc",
+      "postinstall": "npm run build",
+      "prod": "node build/index.js"
+   }
+}

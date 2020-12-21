@@ -8,3 +8,6 @@ services:
     environment:
       SA_PASSWORD: "password"
       ACCEPT_EULA: "Y"
+
+# note, this container construction may fail
+# if password is not strong enough

@@ -2,6 +2,13 @@
    "name": "tsorm",
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
+   "scripts": {
+	"prebuild": "eslint --fix --ext .ts,.tsx .",
+	"start": "ts-node src/index.ts",
+	"build": "tsc",
+	"postinstall": "npm run build",
+	"prod": "node build/index.js"
+ 	},
    "devDependencies": {
       "@types/bcrypt": "^3.0.0",
       "@types/body-parser": "^1.19.0",
@@ -19,6 +26,7 @@
       "@types/node": "^8.0.29",
       "@typescript-eslint/parser": "^4.10.0",
       "eslint": "^7.16.0",
+      "husky": "^4.3.6",
       "ts-node": "3.3.0",
       "typescript": "3.3.3333"
    },
@@ -42,11 +50,9 @@
       "typeorm": "0.2.29",
       "winston": "^3.3.3"
    },
-   "scripts": {
-      "prebuild": "eslint --fix --ext .ts,.tsx .",
-      "start": "ts-node src/index.ts",
-      "build": "tsc",
-      "postinstall": "npm run build",
-      "prod": "node build/index.js"
-   }
+   "husky": {
+    "hooks": {
+      "pre-commit": "npm run postinstall"
+    }
+  }
 }

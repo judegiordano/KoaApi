@@ -8,7 +8,7 @@ export default {
 	username: config.DB_USERNAME,
 	password: config.DB_PASSWORD,
 	database: config.DB_NAME,
-	synchronize: true,
+	synchronize: false,
 	logging: config.NODE_ENV == "production" ? false : true,
 	autoReconnect: true,
 	reconnectTries: Number.MAX_VALUE,

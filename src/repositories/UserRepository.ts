@@ -36,6 +36,9 @@ export default class UserRepository {
 			const newUser = new User();
 			newUser.email = register.email;
 			newUser.password = tempPass;
+			newUser.activated = false;
+			newUser.created = new Date;
+			newUser.lastUpdated = new Date;
 
 			return await newUser.save();
 		} catch (e) {

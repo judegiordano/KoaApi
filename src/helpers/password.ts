@@ -6,7 +6,7 @@ export const hash = async (string: string): Promise<string> => {
 		const hash = await bcrypt.hash(string, salt);
 		return hash;
 	} catch (e) {
-		throw new Error(e);
+		throw Error(e);
 	}
 };
 
@@ -15,6 +15,6 @@ export const compare = async (pass: string, hash: string): Promise<boolean> => {
 		const valid = await bcrypt.compare(pass, hash);
 		return valid;
 	} catch (e) {
-		throw new Error(e);
+		throw Error(e);
 	}
 };

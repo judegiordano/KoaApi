@@ -10,7 +10,7 @@ const start = async (): Promise<void> => {
 	try {
 		await connect();
 	} catch (e) {
-		throw new Error(e);
+		throw Error(e);
 	}
 	app.listen(config.PORT, () => {
 		logger.info(`http://localhost:${config.PORT}`);

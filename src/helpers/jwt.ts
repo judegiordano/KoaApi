@@ -12,7 +12,7 @@ export const sign = async (payload: IJwtPayload): Promise<string> => {
 		});
 
 	} catch (e) {
-		throw new Error(e);
+		throw Error(e);
 	}
 };
 
@@ -30,6 +30,6 @@ export const verify = async (token: string): Promise<IJWT> => {
 			expires: dateFormat(new Date(parseInt(data.exp) * 1000), "yyyy-mm-dd h:MM:ss")
 		} as IJWT;
 	} catch (e) {
-		throw new Error(e);
+		throw Error(e);
 	}
 };

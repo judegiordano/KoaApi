@@ -21,7 +21,7 @@ const connect = async () => {
 		logger.info("Database connection was successful!");
 	} catch (e) {
 		logger.error("ERROR: Database connection failed!!", e);
-		throw new Error(e);
+		throw Error(e);
 	}
 };
 

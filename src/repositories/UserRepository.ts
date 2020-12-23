@@ -9,14 +9,14 @@ export default class UserRepository {
 			const query = await User.findOne({
 				email: login.email,
 			});
-			if (!query) throw new Error("email not found");
+			if (!query) throw Error("email not found");
 
 			const hash = await compare(login.password, query.password);
-			if (!hash) throw new Error("wrong password");
+			if (!hash) throw Error("wrong password");
 
 			return query;
 		} catch (e) {
-			throw new Error(e);
+			throw Error(e);
 		}
 	}
 
@@ -25,9 +25,9 @@ export default class UserRepository {
 			const exists = await User.findOne({
 				email: register.email,
 			});
-			if (exists) throw new Error("email taken");
+			if (exists) throw Error("email taken");
 		} catch (e) {
-			throw new Error(e);
+			throw Error(e);
 		}
 
 		try {
@@ -42,7 +42,22 @@ export default class UserRepository {
 
 			return await newUser.save();
 		} catch (e) {
-			throw new Error(e);
+			throw Error(e);
+		}
+	}
+
+	public static async GetOne(_id: number): Promise<User> {
+		try {
+			const query = await User.createQueryBuilder()
+				.select("User")
+				.where("User.id = :id", { id: _id }).getOne();
+
+			if (!query) {
+				throw Error(`user not found with id ${_id}`);
+			}
+			return query;
+		} catch (e) {
+			throw Error(e);
 		}
 	}
 }

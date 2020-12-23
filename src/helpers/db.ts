@@ -1,13 +1,14 @@
 import { Connection, createConnection, getConnection } from "typeorm";
 import logger from "../services/logger";
 import ORMConfig from "./ormconfig";
+import { Database } from "../types/Constants";
 
 const connect = async () => {
 	let connection: Connection | undefined;
 	try {
 		connection = getConnection();
 	} catch (e) {
-		logger.error("ERROR: Database connection failed!!", e);
+		logger.error(Database.connectionErr, e);
 	}
 
 	try {
@@ -18,9 +19,9 @@ const connect = async () => {
 		} else {
 			await createConnection(ORMConfig);
 		}
-		logger.info("Database connection was successful!");
+		logger.info(Database.connectionSucc);
 	} catch (e) {
-		logger.error("ERROR: Database connection failed!!", e);
+		logger.error(Database.connectionErr, e);
 		throw Error(e);
 	}
 };

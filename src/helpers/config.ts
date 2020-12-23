@@ -1,6 +1,18 @@
 import dotenv from "dotenv";
 import path from "path";
+import { Environment } from "../types/Constants";
 dotenv.config();
+
+let env;
+if (process.env.NODE_ENV === Environment.stg) {
+	env = Environment.stg;
+}
+else if (process.env.NODE_ENV === Environment.prod) {
+	env = Environment.prod;
+}
+else {
+	env = Environment.dev;
+}
 
 const config = {
 	DB_TYPE: process.env.DB_TYPE || "mssql",
@@ -11,7 +23,7 @@ const config = {
 	DB_PASSWORD: process.env.DB_PASSWORD || "password",
 	DB_NAME: process.env.DB_NAME || "tempdb",
 	JWT_SECRET: process.env.JWT_SECRET || undefined,
-	NODE_ENV: process.env.NODE_ENV || "development",
+	NODE_ENV: env,
 	IS_COMPILED: path.extname(__filename).includes("js")
 };
 

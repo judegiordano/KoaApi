@@ -2,6 +2,7 @@ import Router from "koa-router";
 import { ILogin, IRegister } from "../types/IUserActions";
 import { sign } from "../helpers/jwt";
 import { IJwtPayload } from "../types/IJWT";
+import { RequestErrors } from "../types/Constants";
 import jwt from "../middleware/jwt";
 import user from "../repositories/UserRepository";
 
@@ -10,7 +11,7 @@ const router = new Router({ prefix: "/user" });
 router.post("/login", async (ctx, next) => {
 	const req = <ILogin>ctx.request.body;
 	if (!req.email || !req.password) {
-		throw Error("missing body { email, password }");
+		throw Error(RequestErrors.missingBody);
 	}
 
 	try {
@@ -37,7 +38,7 @@ router.post("/login", async (ctx, next) => {
 router.post("/register", async (ctx, next) => {
 	const req = <IRegister>ctx.request.body;
 	if (!req.email || !req.password) {
-		throw Error("missing body { email, password }");
+		throw Error(RequestErrors.missingBody);
 	}
 
 	try {

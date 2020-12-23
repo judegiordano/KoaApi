@@ -1,3 +1,4 @@
+import { Environment } from "../types/Constants";
 import { createLogger, format, transports } from "winston";
 import config from "../helpers/config";
 
@@ -25,7 +26,7 @@ const logger = createLogger({
 	],
 });
 
-if (config.NODE_ENV !== "production") {
+if (config.NODE_ENV !== Environment.prod) {
 	logger.add(new transports.Console({
 		format: format.simple(),
 	}));

@@ -9,6 +9,7 @@ import helmet from "koa-helmet";
 import log from "./logger";
 import router from "../controllers";
 import { IErr } from "../types/IRoute";
+import { RateLimit } from "../types/Constants";
 
 const app = new Koa();
 const map = new Map();
@@ -30,7 +31,7 @@ app.use(ratelimit({
 	driver: "memory",
 	db: map,
 	duration: (60000 * 10), // 10 minutes
-	errorMessage: "Too Many Requests. Please Try Again later.",
+	errorMessage: RateLimit.error,
 	id: (ctx) => ctx.ip,
 	headers: {
 		remaining: "Rate-Limit-Remaining",

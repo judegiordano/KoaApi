@@ -4,7 +4,6 @@ import User from "./UserController";
 
 const router = new Router({ prefix: "/api" });
 
-router.use(User.routes());
-router.use(User.allowedMethods());
+router.use(User.routes()).use(User.allowedMethods());
 
 export default router;

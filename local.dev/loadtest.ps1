@@ -1,0 +1,1 @@
+loadtest http://localhost:3000/api/user/test -t 20 -c 10 --rps 500

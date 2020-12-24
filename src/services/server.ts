@@ -33,7 +33,7 @@ if (config.NODE_ENV === Environment.prod) {
 	app.use(ratelimit({
 		driver: "memory",
 		db: map,
-		duration: (60000 * 10), // 10 minutes
+		duration: config.LIMIT_RESET,
 		errorMessage: RateLimit.error,
 		id: (ctx) => ctx.ip,
 		headers: {
@@ -41,7 +41,7 @@ if (config.NODE_ENV === Environment.prod) {
 			reset: "Rate-Limit-Reset",
 			total: "Rate-Limit-Total"
 		},
-		max: 30,
+		max: config.LIMIT,
 		disableHeader: false
 	}));
 }

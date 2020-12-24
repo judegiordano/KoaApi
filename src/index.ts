@@ -12,6 +12,7 @@ const start = async (): Promise<void> => {
 		throw Error(e);
 	}
 	app.listen(config.PORT, () => {
+		logger.info(`worker started under ${config.NODE_ENV} environment`);
 		logger.info(`http://localhost:${config.PORT}`);
 	});
 };

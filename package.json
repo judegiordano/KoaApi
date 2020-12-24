@@ -4,10 +4,10 @@
    "description": "Awesome project developed with TypeORM.",
    "scripts": {
 	"prebuild": "eslint --fix --ext .ts,.tsx .",
-	"start": "ts-node src/index.ts",
+	"dev": "ts-node src/index.ts",
 	"build": "tsc",
 	"postinstall": "npm run build",
-	"prod": "node build/index.js"
+	"start": "node build/index.js"
  	},
    "devDependencies": {
       "@types/bcrypt": "^3.0.0",

@@ -10,6 +10,8 @@ import log from "./logger";
 import router from "../controllers";
 import { IErr } from "../types/IRoute";
 import { RateLimit } from "../types/Constants";
+import config from "../helpers/config";
+import { Environment } from "../types/Constants";
 
 const app = new Koa();
 const map = new Map();
@@ -27,20 +29,22 @@ app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 		} as IErr;
 	}
 });
-app.use(ratelimit({
-	driver: "memory",
-	db: map,
-	duration: (60000 * 10), // 10 minutes
-	errorMessage: RateLimit.error,
-	id: (ctx) => ctx.ip,
-	headers: {
-		remaining: "Rate-Limit-Remaining",
-		reset: "Rate-Limit-Reset",
-		total: "Rate-Limit-Total"
-	},
-	max: 30,
-	disableHeader: false
-}));
+if (config.NODE_ENV === Environment.prod) {
+	app.use(ratelimit({
+		driver: "memory",
+		db: map,
+		duration: (60000 * 10), // 10 minutes
+		errorMessage: RateLimit.error,
+		id: (ctx) => ctx.ip,
+		headers: {
+			remaining: "Rate-Limit-Remaining",
+			reset: "Rate-Limit-Reset",
+			total: "Rate-Limit-Total"
+		},
+		max: 30,
+		disableHeader: false
+	}));
+}
 app.use(cors());
 app.use(json());
 app.use(logger());

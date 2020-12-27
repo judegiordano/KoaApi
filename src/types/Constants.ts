@@ -6,7 +6,7 @@ export const enum Environment {
 }
 
 export const enum RequestErrors {
-	missingBody = "missing body { email:string, password:string }"
+	missingBody = "missing body { email:<string>, password:<string> }"
 }
 
 export const enum JWTErrs {

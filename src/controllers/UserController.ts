@@ -10,6 +10,7 @@ import user from "../repositories/UserRepository";
 
 const router = new Router({ prefix: "/user" });
 
+// try logging user in and sign as jwt
 router.post("/login", async (ctx, next) => {
 	const req = <ILogin>ctx.request.body;
 	if (!req.email || !req.password) {
@@ -28,6 +29,7 @@ router.post("/login", async (ctx, next) => {
 	}
 });
 
+// try registering new user and sign as jwt
 router.post("/register", async (ctx, next) => {
 	const req = <IRegister>ctx.request.body;
 	if (!req.email || !req.password) {
@@ -46,11 +48,13 @@ router.post("/register", async (ctx, next) => {
 	}
 });
 
+// valiadte jwt middleware with Bearer token
 router.post("/validate", jwt, async (ctx, next) => {
 	ctx.body = ctx.state.jwt;
 	return await next();
 });
 
+// get one user by id, if not cached, cache and return
 router.get("/:id", async (ctx, next) => {
 	const req: number = ctx.params.id;
 

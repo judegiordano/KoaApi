@@ -5,6 +5,7 @@ import { UserErrors } from "../types/Constants";
 
 export default class UserRepository {
 
+	// check credentials, return user or throw
 	public static async Login(login: ILogin): Promise<User> {
 		try {
 			const query = await User.findOne({
@@ -21,6 +22,7 @@ export default class UserRepository {
 		}
 	}
 
+	// check credentials, return new user or throw
 	public static async Register(register: IRegister): Promise<User> {
 		try {
 			const exists = await User.findOne({
@@ -47,6 +49,7 @@ export default class UserRepository {
 		}
 	}
 
+	// check id, return user or throw
 	public static async GetOne(_id: number): Promise<User> {
 		try {
 			const query = await User.createQueryBuilder()

@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 import Koa from "koa";
 import path from "path";
 import os from "os";
-import { Environment } from "../types/Constants";
+import { Environment, RateLimit } from "../types/Constants";
 import IRateLimitOptions from "../types/IRateLimitOptions";
 
 dotenv.config();
@@ -43,7 +43,7 @@ const config = {
 		driver: "memory",
 		db: new Map(),
 		duration: (60000 * 30), // 30 minutes,
-		errorMessage: "Too Many Requests. Please Try Again later.",
+		errorMessage: RateLimit.error,
 		id: (ctx: Koa.Context) => ctx.ip,
 		headers: {
 			remaining: "Rate-Limit-Remaining",
@@ -52,6 +52,10 @@ const config = {
 		},
 		max: 100,
 		disableHeader: false
+	},
+	CACHE_SETTINGS: {
+		stdTTL: <number>100,
+		checkperiod: <number>120
 	}
 };
 

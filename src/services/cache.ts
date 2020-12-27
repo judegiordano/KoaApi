@@ -1,2 +1,4 @@
 import NodeCache from "node-cache";
-export default new NodeCache({ stdTTL: 100, checkperiod: 120 });
+import config from "../helpers/config";
+
+export default new NodeCache(config.CACHE_SETTINGS);

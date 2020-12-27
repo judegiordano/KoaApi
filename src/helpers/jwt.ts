@@ -33,3 +33,13 @@ export const verify = async (token: string): Promise<IJWT> => {
 		throw Error(e);
 	}
 };
+
+export const signUser = async (payload: IJwtPayload): Promise<string> => {
+	const token = await sign({
+		id: payload.id,
+		email: payload.email,
+		created: payload.created,
+		activated: payload.activated
+	} as IJwtPayload);
+	return token;
+};

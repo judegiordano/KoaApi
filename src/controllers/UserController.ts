@@ -1,6 +1,6 @@
 import Router from "koa-router";
 import { ILogin, IRegister } from "../types/IUserActions";
-import { sign } from "../helpers/jwt";
+import { signUser } from "../helpers/jwt";
 import { IJwtPayload } from "../types/IJWT";
 import { RequestErrors } from "../types/Constants";
 import jwt from "../middleware/jwt";
@@ -15,17 +15,8 @@ router.post("/login", async (ctx, next) => {
 	}
 
 	try {
-		const query = await user.Login({
-			email: req.email,
-			password: req.password
-		} as ILogin);
-
-		const _token = await sign({
-			id: query.id,
-			email: query.email,
-			created: query.created,
-			activated: query.activated
-		} as IJwtPayload);
+		const query: IJwtPayload = await user.Login(req);
+		const _token: string = await signUser(query);
 
 		ctx.status = 200;
 		ctx.body = { token: _token };
@@ -42,17 +33,8 @@ router.post("/register", async (ctx, next) => {
 	}
 
 	try {
-		const query = await user.Register({
-			email: req.email,
-			password: req.password
-		} as IRegister);
-
-		const _token = await sign({
-			id: query.id,
-			email: query.email,
-			created: query.created,
-			activated: query.activated
-		} as IJwtPayload);
+		const query: IJwtPayload = await user.Register(req);
+		const _token: string = await signUser(query);
 
 		ctx.status = 200;
 		ctx.body = { token: _token };

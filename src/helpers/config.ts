@@ -1,7 +1,9 @@
 import * as dotenv from "dotenv";
+import Koa from "koa";
 import path from "path";
 import os from "os";
 import { Environment } from "../types/Constants";
+import IRateLimitOptions from "../types/IRateLimitOptions";
 
 dotenv.config();
 
@@ -33,9 +35,23 @@ const config = {
 	CORES: <number>cors,
 	IS_COMPILED: <boolean>path.extname(__filename).includes("js"),
 	SLOW_DOWN: {
-		windowMs: 30 * 60 * 1000, // 15 minutes
-		delayAfter: 50,
-		delayMs: 500
+		windowMs: <number>30 * 60 * 1000, // 10 minutes
+		delayAfter: <number>50,
+		delayMs: <number>500
+	},
+	RATE_LIMIT: <IRateLimitOptions>{
+		driver: "memory",
+		db: new Map(),
+		duration: (60000 * 30), // 30 minutes,
+		errorMessage: "Too Many Requests. Please Try Again later.",
+		id: (ctx: Koa.Context) => ctx.ip,
+		headers: {
+			remaining: "Rate-Limit-Remaining",
+			reset: "Rate-Limit-Reset",
+			total: "Rate-Limit-Total"
+		},
+		max: 100,
+		disableHeader: false
 	}
 };
 

@@ -50,12 +50,18 @@ router.post("/register", async (ctx, next) => {
 
 // valiadte jwt middleware with Bearer token
 router.post("/validate", jwt, async (ctx, next) => {
-	ctx.body = ctx.state.jwt;
-	return await next();
+	try {
+		const token = ctx.state.jwt;
+		ctx.status = 200;
+		ctx.body = token;
+		return await next();
+	} catch (e) {
+		throw Error(e);
+	}
 });
 
 // get one user by id, if not cached, cache and return
-router.get("/:id", async (ctx, next) => {
+router.get("/id/:id", async (ctx, next) => {
 	const req: number = ctx.params.id;
 
 	try {

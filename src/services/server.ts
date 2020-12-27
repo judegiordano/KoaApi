@@ -5,6 +5,7 @@ import ratelimit from "koa-ratelimit";
 import json from "koa-json";
 import cors from "koa-cors";
 import slowDown from "koa-slow-down";
+import responseTime from "koa-response-time";
 import helmet from "koa-helmet";
 
 import router from "../controllers";
@@ -26,6 +27,7 @@ app.use(cors());
 app.use(json());
 app.use(helmet());
 app.use(bodyParser());
+app.use(responseTime());
 app.use(router.routes());
 app.use(router.allowedMethods());
 

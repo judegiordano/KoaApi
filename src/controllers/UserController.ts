@@ -3,6 +3,8 @@ import { ILogin, IRegister } from "../types/IUserActions";
 import { signUser } from "../helpers/jwt";
 import { IJwtPayload } from "../types/IJWT";
 import { RequestErrors } from "../types/Constants";
+import { CacheNames } from "../types/Constants";
+import cache from "../services/cache";
 import jwt from "../middleware/jwt";
 import user from "../repositories/UserRepository";
 
@@ -20,7 +22,7 @@ router.post("/login", async (ctx, next) => {
 
 		ctx.status = 200;
 		ctx.body = { token: _token };
-		await next();
+		return await next();
 	} catch (e) {
 		throw Error(e);
 	}
@@ -38,7 +40,7 @@ router.post("/register", async (ctx, next) => {
 
 		ctx.status = 200;
 		ctx.body = { token: _token };
-		await next();
+		return await next();
 	} catch (e) {
 		throw Error(e);
 	}
@@ -46,16 +48,26 @@ router.post("/register", async (ctx, next) => {
 
 router.post("/validate", jwt, async (ctx, next) => {
 	ctx.body = ctx.state.jwt;
-	await next();
+	return await next();
 });
 
 router.get("/:id", async (ctx, next) => {
 	const req: number = ctx.params.id;
+
 	try {
+		const cachedUser = cache.get(`${CacheNames.getById}${req}`);
+		if (cachedUser != undefined) {
+			ctx.status = 200;
+			ctx.body = cachedUser;
+			return await next();
+		}
+
 		const query = await user.GetOne(req);
+		cache.set(`${CacheNames.getById}${req}`, query, 60 * 15);
+
 		ctx.status = 200;
 		ctx.body = query;
-		await next();
+		return await next();
 	} catch (e) {
 		throw Error(e);
 	}

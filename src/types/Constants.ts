@@ -17,7 +17,7 @@ export const enum UserErrors {
 	emailTaken = "email taken",
 	emailNotFound = "email not found",
 	wrongPassword = "incorrect password",
-	wrongId = "node user found matching given id"
+	wrongId = "no user found matching given id"
 }
 
 export const enum RateLimit {
@@ -27,4 +27,8 @@ export const enum RateLimit {
 export const enum Database {
 	connectionSucc = "successfully connected to database",
 	connectionErr = "error connecting to database"
+}
+
+export const enum CacheNames {
+	getById = "getOneUserById"
 }

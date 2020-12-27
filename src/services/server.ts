@@ -4,17 +4,17 @@ import bodyParser from "koa-bodyparser";
 import ratelimit from "koa-ratelimit";
 import json from "koa-json";
 import cors from "koa-cors";
+import slowDown from "koa-slow-down";
 import helmet from "koa-helmet";
 
 import log from "./logger";
 import router from "../controllers";
 import { IErr } from "../types/IRoute";
-import { RateLimit } from "../types/Constants";
 import config from "../helpers/config";
 import { Environment } from "../types/Constants";
 
 const app = new Koa();
-const map = new Map();
+
 app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 	try {
 		await next();
@@ -32,22 +32,25 @@ app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 if (config.NODE_ENV === Environment.prod) {
 	app.use(ratelimit({
 		driver: "memory",
-		db: map,
-		duration: config.LIMIT_RESET,
-		errorMessage: RateLimit.error,
+		db: new Map(),
+		duration: (60000 * 10), // 10 minutes
+		errorMessage: "Too Many Requests. Please Try Again later.",
 		id: (ctx) => ctx.ip,
 		headers: {
 			remaining: "Rate-Limit-Remaining",
 			reset: "Rate-Limit-Reset",
 			total: "Rate-Limit-Total"
 		},
-		max: config.LIMIT,
+		max: 30,
 		disableHeader: false
 	}));
+	app.use(slowDown(config.SLOW_DOWN));
+}
+if (config.NODE_ENV === Environment.dev) {
+	app.use(logger());
 }
 app.use(cors());
 app.use(json());
-app.use(logger());
 app.use(helmet());
 app.use(bodyParser());
 app.use(router.routes());

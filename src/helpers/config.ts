@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import path from "path";
 import os from "os";
 import { Environment } from "../types/Constants";
+
 dotenv.config();
 
 let env;
@@ -31,8 +32,11 @@ const config = {
 	NODE_ENV: <Environment>env,
 	CORES: <number>cors,
 	IS_COMPILED: <boolean>path.extname(__filename).includes("js"),
-	LIMIT: <number>30,
-	LIMIT_RESET: <number>(60000 * 10)  // 10 minutes
+	SLOW_DOWN: {
+		windowMs: 30 * 60 * 1000, // 15 minutes
+		delayAfter: 50,
+		delayMs: 500
+	}
 };
 
 if (config.DB_TYPE === undefined) {

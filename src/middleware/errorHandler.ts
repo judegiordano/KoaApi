@@ -1,9 +1,9 @@
-import Koa from "koa";
+import Koa, { Next } from "koa";
 import { IErr } from "../types/IRoute";
 
-export default async (ctx: Koa.Context, next: Koa.Next) => {
+export default async (ctx: Koa.Context, next: Koa.Next): Promise<Next> => {
 	try {
-		await next();
+		return await next();
 	} catch (e) {
 		ctx.status = 500;
 		ctx.body = {

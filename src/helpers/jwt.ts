@@ -3,14 +3,11 @@ import dateFormat from "dateformat";
 import config from "./config";
 import { IJWT, IJwtPayload } from "../types/IJWT";
 
-const { JWT_SECRET } = config;
-
 export const sign = async (payload: IJwtPayload): Promise<string> => {
 	try {
-		return jwt.sign(payload, JWT_SECRET, {
-			expiresIn: "7d"
+		return jwt.sign(payload, config.JWT_SECRET, {
+			expiresIn: config.JWT_EXPIRATION
 		});
-
 	} catch (e) {
 		throw Error(e);
 	}
@@ -18,7 +15,7 @@ export const sign = async (payload: IJwtPayload): Promise<string> => {
 
 export const verify = async (token: string): Promise<IJWT> => {
 	try {
-		const data = jwt.verify(token, JWT_SECRET) as IJWT;
+		const data = <IJWT>jwt.verify(token, config.JWT_SECRET);
 		return {
 			id: data.id,
 			created: data.created,
@@ -28,18 +25,18 @@ export const verify = async (token: string): Promise<IJWT> => {
 			exp: data.exp,
 			issued: dateFormat(new Date(parseInt(data.iat) * 1000), "yyyy-mm-dd h:MM:ss"),
 			expires: dateFormat(new Date(parseInt(data.exp) * 1000), "yyyy-mm-dd h:MM:ss")
-		} as IJWT;
+		};
 	} catch (e) {
 		throw Error(e);
 	}
 };
 
-export const signUser = async (payload: IJwtPayload): Promise<string> => {
+export const signUser = async (user: IJwtPayload): Promise<string> => {
 	const token = await sign({
-		id: payload.id,
-		email: payload.email,
-		created: payload.created,
-		activated: payload.activated
+		id: user.id,
+		email: user.email,
+		created: user.created,
+		activated: user.activated
 	} as IJwtPayload);
 	return token;
 };

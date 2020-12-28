@@ -1,3 +1,4 @@
+import koa, { Next } from "koa";
 import Router from "koa-router";
 import { ILogin, IRegister } from "../types/IUserActions";
 import { signUser } from "../helpers/jwt";
@@ -11,7 +12,7 @@ import user from "../repositories/UserRepository";
 const router = new Router({ prefix: "/user" });
 
 // try logging user in and sign as jwt
-router.post("/login", async (ctx, next) => {
+router.post("/login", async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 	const req = <ILogin>ctx.request.body;
 
 	if (!req.email || !req.password) throw Error(RequestErrors.missingBody);
@@ -30,7 +31,7 @@ router.post("/login", async (ctx, next) => {
 });
 
 // try registering new user and sign as jwt
-router.post("/register", async (ctx, next) => {
+router.post("/register", async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 	const req = <IRegister>ctx.request.body;
 
 	if (!req.email || !req.password) throw Error(RequestErrors.missingBody);
@@ -48,7 +49,7 @@ router.post("/register", async (ctx, next) => {
 });
 
 // valiadte jwt middleware with Bearer token
-router.post("/validate", jwt, async (ctx, next) => {
+router.post("/validate", jwt, async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 	try {
 		const token = ctx.state.jwt;
 		ctx.status = 200;
@@ -60,7 +61,7 @@ router.post("/validate", jwt, async (ctx, next) => {
 });
 
 // get one user by id, if not cached, cache and return
-router.get("/id/:id", async (ctx, next) => {
+router.get("/id/:id", async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 	const req: number = ctx.params.id;
 
 	try {

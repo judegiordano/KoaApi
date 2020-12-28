@@ -31,6 +31,7 @@ const config = {
 	DB_PASSWORD: <string>process.env.DB_PASSWORD || undefined,
 	DB_NAME: <string>process.env.DB_NAME || undefined,
 	JWT_SECRET: <string>process.env.JWT_SECRET || undefined,
+	JWT_EXPIRATION: <string | number>"7d",
 	NODE_ENV: <Environment>env,
 	CORES: <number>cors,
 	IS_COMPILED: <boolean>path.extname(__filename).includes("js"),

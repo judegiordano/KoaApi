@@ -3,7 +3,7 @@ import logger from "../services/logger";
 import ORMConfig from "./ormconfig";
 import { Database } from "../types/Constants";
 
-const connect = async () => {
+const connect = async (): Promise<void> => {
 	let connection: Connection | undefined;
 	try {
 		connection = getConnection();

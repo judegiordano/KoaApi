@@ -13,9 +13,9 @@ const router = new Router({ prefix: "/user" });
 // try logging user in and sign as jwt
 router.post("/login", async (ctx, next) => {
 	const req = <ILogin>ctx.request.body;
-	if (!req.email || !req.password) {
-		throw Error(RequestErrors.missingBody);
-	}
+
+	if (!req.email || !req.password) throw Error(RequestErrors.missingBody);
+
 
 	try {
 		const query: IJwtPayload = await user.Login(req);
@@ -32,9 +32,8 @@ router.post("/login", async (ctx, next) => {
 // try registering new user and sign as jwt
 router.post("/register", async (ctx, next) => {
 	const req = <IRegister>ctx.request.body;
-	if (!req.email || !req.password) {
-		throw Error(RequestErrors.missingBody);
-	}
+
+	if (!req.email || !req.password) throw Error(RequestErrors.missingBody);
 
 	try {
 		const query: IJwtPayload = await user.Register(req);

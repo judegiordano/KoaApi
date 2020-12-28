@@ -34,11 +34,11 @@ export default class UserRepository {
 		}
 
 		try {
-			const tempPass = await hash(register.password);
+			const hashedPass = await hash(register.password);
 
 			const newUser = new User();
 			newUser.email = register.email;
-			newUser.password = tempPass;
+			newUser.password = hashedPass;
 			newUser.activated = false;
 			newUser.created = new Date;
 			newUser.lastUpdated = new Date;

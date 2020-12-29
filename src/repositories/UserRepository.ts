@@ -1,11 +1,10 @@
 import { User } from "../models/User";
-import { ILogin, IRegister } from "../types/IUserActions";
+import { IDeleteAccount, ILogin, IRegister, IUpdateEmail, IUpdatePass } from "../types/IUserActions";
 import { compare, hash } from "../helpers/password";
 import { UserErrors } from "../types/Constants";
 
 export default class UserRepository {
 
-	// check credentials, return user or throw
 	public static async Login(login: ILogin): Promise<User> {
 		try {
 			const query = await User.findOne({
@@ -22,7 +21,6 @@ export default class UserRepository {
 		}
 	}
 
-	// check credentials, return new user or throw
 	public static async Register(register: IRegister): Promise<User> {
 		try {
 			const exists = await User.findOne({
@@ -49,7 +47,71 @@ export default class UserRepository {
 		}
 	}
 
-	// check id, return user or throw
+	public static async UpdateEmail(update: IUpdateEmail): Promise<User> {
+		try {
+			const exists = await User.findOne({
+				where: {
+					id: update.id,
+					email: update.email
+				}
+			});
+			if (!exists) throw Error(UserErrors.wrongCreds);
+
+			const taken = await User.findOne({ email: update.newEmail });
+			if (taken) throw Error(UserErrors.emailTaken);
+
+			exists.email = update.newEmail;
+			exists.lastUpdated = new Date;
+			exists.save();
+
+			return exists;
+		} catch (e) {
+			throw Error(e);
+		}
+	}
+
+	public static async UpdatePassword(update: IUpdatePass): Promise<User> {
+		try {
+			const exists = await User.findOne({
+				where: {
+					id: update.id,
+					email: update.email
+				}
+			});
+			if (!exists) throw Error(UserErrors.wrongCreds);
+
+			const hashedPass = await hash(update.newPassword);
+
+			exists.password = hashedPass;
+			exists.lastUpdated = new Date;
+			exists.save();
+
+			return exists;
+		} catch (e) {
+			throw Error(e);
+		}
+	}
+
+	public static async DeleteUser(remove: IDeleteAccount): Promise<void> {
+		try {
+			const exists = await User.findOne({
+				where: {
+					id: remove.id,
+					email: remove.email
+				}
+			});
+			if (!exists) throw Error(UserErrors.wrongCreds);
+
+			const hash = await compare(remove.password, exists.password);
+			if (!hash) throw Error(UserErrors.wrongPassword);
+
+			await User.delete(exists);
+
+		} catch (e) {
+			throw Error(e);
+		}
+	}
+
 	public static async GetOne(_id: number): Promise<User> {
 		try {
 			const query = await User.createQueryBuilder()

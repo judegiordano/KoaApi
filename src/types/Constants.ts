@@ -6,7 +6,9 @@ export const enum Environment {
 }
 
 export const enum RequestErrors {
-	missingBody = "missing body { email:<string>, password:<string> }"
+	missingBody = "missing body { email:<string>, password:<string> }",
+	missingEmail = "missing new email field { newEmail:<string> }",
+	missingPassword = "missing new password field { newPassword:<string> }"
 }
 
 export const enum JWTErrs {
@@ -17,7 +19,8 @@ export const enum UserErrors {
 	emailTaken = "email taken",
 	emailNotFound = "email not found",
 	wrongPassword = "incorrect password",
-	wrongId = "no user found matching given id"
+	wrongId = "no user found matching given id",
+	wrongCreds = "no user found matching given id and email"
 }
 
 export const enum RateLimit {

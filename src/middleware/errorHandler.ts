@@ -9,8 +9,7 @@ export default async (ctx: Koa.Context, next: Koa.Next): Promise<Next> => {
 		ctx.body = {
 			ok: false,
 			status: ctx.status,
-			error: e.message,
-			raw: e.stack.toString()
+			error: e.message
 		} as IErr;
 	}
 };

@@ -23,6 +23,7 @@ else {
 }
 
 const config = {
+	NODE_ENV: <Environment>env,
 	PORT: <number>parseInt(process.env.PORT) || 3000,
 	DB_TYPE: <string>process.env.DB_TYPE || undefined,
 	DB_HOST: <string>process.env.DB_HOST || undefined,
@@ -32,7 +33,8 @@ const config = {
 	DB_NAME: <string>process.env.DB_NAME || undefined,
 	JWT_SECRET: <string>process.env.JWT_SECRET || undefined,
 	JWT_EXPIRATION: <string | number>"7d",
-	NODE_ENV: <Environment>env,
+	EMAIL: <string>process.env.EMAIL || undefined,
+	EMAIL_PASSWORD: <string>process.env.EMAIL_PASSWORD || undefined,
 	CORES: <number>cors,
 	IS_COMPILED: <boolean>path.extname(__filename).includes("js"),
 	SLOW_DOWN: {
@@ -77,6 +79,12 @@ else if (config.DB_NAME === undefined) {
 }
 else if (config.JWT_SECRET === undefined) {
 	throw Error("JWT_SECRET must be set");
+}
+else if (config.EMAIL === undefined) {
+	throw Error("EMAIL_SERVICE must be set");
+}
+else if (config.EMAIL_PASSWORD === undefined) {
+	throw Error("EMAIL_PASSWORD must be set");
 }
 
 export default config;

@@ -1,4 +1,3 @@
-
 import Router from "koa-router";
 import User from "./UserController";
 

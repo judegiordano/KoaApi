@@ -11,7 +11,6 @@ import user from "../repositories/UserRepository";
 
 const router = new Router({ prefix: "/user" });
 
-// try logging user in and sign as jwt
 router.post("/login", async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 
 	const req = <ILogin>ctx.request.body;
@@ -19,17 +18,13 @@ router.post("/login", async (ctx: koa.Context, next: koa.Next): Promise<Next> =>
 
 	try {
 		const query: IJwtPayload = await user.Login(req);
-		const _token: string = await signUser(query);
-
-		ctx.status = 200;
-		ctx.body = { token: _token };
+		ctx.body = { token: await signUser(query) as string };
 		return await next();
 	} catch (e) {
 		throw Error(e);
 	}
 });
 
-// try registering new user and sign as jwt
 router.post("/register", async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 
 	const req = <IRegister>ctx.request.body;
@@ -37,29 +32,22 @@ router.post("/register", async (ctx: koa.Context, next: koa.Next): Promise<Next>
 
 	try {
 		const query: IJwtPayload = await user.Register(req);
-		const _token: string = await signUser(query);
-
-		ctx.status = 200;
-		ctx.body = { token: _token };
+		ctx.body = { token: await signUser(query) as string };
 		return await next();
 	} catch (e) {
 		throw Error(e);
 	}
 });
 
-// valiadte jwt middleware with Bearer token
 router.post("/validate", jwt, async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 	try {
-		const token = ctx.state.jwt;
-		ctx.status = 200;
-		ctx.body = token;
+		ctx.body = ctx.state.jwt;
 		return await next();
 	} catch (e) {
 		throw Error(e);
 	}
 });
 
-// update a user email via jwt auth
 router.post("/update/email", jwt, async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 
 	const req = <IUpdateEmail>ctx.request.body;
@@ -71,17 +59,14 @@ router.post("/update/email", jwt, async (ctx: koa.Context, next: koa.Next): Prom
 			email: ctx.state.jwt.email,
 			newEmail: req.newEmail
 		});
-		const _token: string = await signUser(query);
 
-		ctx.status = 200;
-		ctx.body = { token: _token };
+		ctx.body = { token: await signUser(query) as string };
 		return await next();
 	} catch (e) {
 		throw Error(e);
 	}
 });
 
-// update a user password via jwt auth
 router.post("/update/password", jwt, async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 
 	const req = <IUpdatePass>ctx.request.body;
@@ -93,17 +78,14 @@ router.post("/update/password", jwt, async (ctx: koa.Context, next: koa.Next): P
 			email: ctx.state.jwt.email,
 			newPassword: req.newPassword
 		});
-		const _token: string = await signUser(query);
 
-		ctx.status = 200;
-		ctx.body = { token: _token };
+		ctx.body = { token: await signUser(query) };
 		return await next();
 	} catch (e) {
 		throw Error(e);
 	}
 });
 
-// update a user password via jwt auth
 router.post("/delete", jwt, async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 
 	const req = <IDeleteAccount>ctx.request.body;
@@ -116,7 +98,6 @@ router.post("/delete", jwt, async (ctx: koa.Context, next: koa.Next): Promise<Ne
 			password: req.password
 		});
 
-		ctx.status = 200;
 		ctx.body = {
 			ok: true,
 			status: ctx.status,
@@ -128,7 +109,6 @@ router.post("/delete", jwt, async (ctx: koa.Context, next: koa.Next): Promise<Ne
 	}
 });
 
-// get one user by id, if not cached, cache and return
 router.get("/id/:id", async (ctx: koa.Context, next: koa.Next): Promise<Next> => {
 
 	const req: number = ctx.params.id;
@@ -136,7 +116,6 @@ router.get("/id/:id", async (ctx: koa.Context, next: koa.Next): Promise<Next> =>
 	try {
 		const cachedUser = cache.get(`${CacheNames.getById}${req}`);
 		if (cachedUser != undefined) {
-			ctx.status = 200;
 			ctx.body = cachedUser;
 			return await next();
 		}
@@ -144,7 +123,6 @@ router.get("/id/:id", async (ctx: koa.Context, next: koa.Next): Promise<Next> =>
 		const query = await user.GetOne(req);
 		cache.set(`${CacheNames.getById}${req}`, query, 60 * 15);
 
-		ctx.status = 200;
 		ctx.body = query;
 		return await next();
 	} catch (e) {
